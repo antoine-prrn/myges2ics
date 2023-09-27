@@ -3,7 +3,14 @@ FROM rust:1.72.1-bookworm as build
 RUN USER=root cargo new --bin myges2ics
 WORKDIR /myges2ics
 
-COPY . .
+COPY ./Cargo.toml ./Cargo.toml
+COPY ./Cargo.lock ./Cargo.lock
+
+RUN cargo build --release
+RUN rm src/*
+COPY ./src ./src
+
+RUN rm ./target/release/deps/myges2ics*
 
 RUN cargo build --release
 
