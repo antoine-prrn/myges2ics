@@ -1,0 +1,14 @@
+version: '3.4'
+services:
+  myges2ics: 
+    container_name: myges2ics
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    restart: always
+    environment:
+      - WEBSERVER_PORT=8080
+      - DAYS_TO_FETCH=60
+      - DAYS_BEFORE_TO_FETCH=7

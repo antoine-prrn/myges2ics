@@ -1,0 +1,7 @@
+target
+.env
+.env.example
+docker-compose.yml
+Dockerfile
+README.md
+Makefile
