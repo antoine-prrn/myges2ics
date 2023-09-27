@@ -8,10 +8,24 @@ pub struct Config {
 
 impl Config {
     pub fn init() -> Config {
-        let webserver_port = std::env::var("WEBSERVER_PORT").expect("WEBSERVER_PORT not set").parse::<u16>().unwrap();
-        let days_to_fetch = std::env::var("DAYS_TO_FETCH").expect("DAYS_TO_FETCH not set").parse::<u64>().unwrap();
-        let days_before_to_fetch = std::env::var("DAYS_BEFORE_TO_FETCH").expect("DAYS_BEFORE_TO_FETCH not set").parse::<u64>().unwrap();
-        let web_server_url = std::env::var("WEB_SERVER_URL").expect("WEB_SERVER_URL not set");
+    let webserver_port = std::env::var("WEBSERVER_PORT")
+        .unwrap_or("8080".to_string()) // Valeur par défaut si WEBSERVER_PORT n'est pas défini
+        .parse::<u16>()
+        .expect("Unable to parse WEBSERVER_PORT");
+
+    let days_to_fetch = std::env::var("DAYS_TO_FETCH")
+        .unwrap_or("60".to_string()) // Valeur par défaut si DAYS_TO_FETCH n'est pas défini
+        .parse::<u64>()
+        .expect("Unable to parse DAYS_TO_FETCH");
+
+    let days_before_to_fetch = std::env::var("DAYS_BEFORE_TO_FETCH")
+        .unwrap_or("7".to_string())
+        .parse::<u64>()
+        .expect("Unable to parse DAYS_BEFORE_TO_FETCH");
+
+    let web_server_url = std::env::var("WEB_SERVER_URL")
+        .unwrap_or("0.0.0.0".to_string())
+        .to_string();
         Config {
             webserver_port,
             days_to_fetch,

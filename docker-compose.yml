@@ -9,7 +9,5 @@ services:
       - 8080:8080
     restart: always
     environment:
-      - WEBSERVER_PORT=8080
       - DAYS_TO_FETCH=60
       - DAYS_BEFORE_TO_FETCH=7
-      - WEB_SERVER_URL="0.0.0.0"
