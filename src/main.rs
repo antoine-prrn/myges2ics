@@ -12,7 +12,7 @@ async fn main() -> std::io::Result<()> {
     let _ = HttpServer::new(|| {
         App::new().service(handlers::get_calendar_handler)
     })
-    .bind(("127.0.0.1", config.webserver_port))?
+    .bind((config.web_server_url, config.webserver_port))?
     .run()
     .await;
 
