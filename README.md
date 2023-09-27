@@ -29,7 +29,8 @@ Please make sure to replace "USER" and "PASSWORD" with your actual myges.fr cred
 You can run this project with docker or by launching the binary.
 **If you want to host it I recommend to host it behind a reverse proxy like *Caddy* to have use HTTPS**
 
-**Docker :**
+
+### With Docker :
 
 A sample ```docker-compose.yml``` is provided in the root folder. To launch the app with Docker, follow these steps:
 1. Clone the repository
@@ -40,7 +41,7 @@ docker compose build && docker compose up -d
 
 Your application is now accessible on the exported port in the ```docker-compose.yml``` file wich is by default ```8080```.
 
-**Build and launch the binary**
+### Build and launch the binary
 
 To build the project you need to install the [rust toolchain](https://rustup.rs/). After installing Rust, clone the repository and execute the following commands:
 1. Build the project:
