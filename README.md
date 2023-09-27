@@ -27,7 +27,7 @@ Please make sure to replace "USER" and "PASSWORD" with your actual myges.fr cred
 ## How to run
 
 You can run this project with docker or by launching the binary.
-**If you want to host it I recommend to host it behind a reverse proxy like *Caddy* to have use HTTPS**
+**If you want to host it I recommend to host it behind a reverse proxy like *Caddy* to have HTTPS**
 
 
 ### With Docker :
