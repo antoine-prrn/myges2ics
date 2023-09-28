@@ -20,7 +20,9 @@ Most calendar apps, such as the native ones on iOS, macOS, or Google Calendar, d
 
 ```https://myges2ics.aprrn.fr/?user=USER&password=PASSWORD```
 Please make sure to replace "USER" and "PASSWORD" with your actual myges.fr credentials.
+
 **Or if you have '#'** in your password (because everything that comes after # is client-side)
+
 ```https://myges2ics.aprrn.fr/?base64=BASE64```
 Replace BASE64 with user:password encoded in base64 with the ':'
 
