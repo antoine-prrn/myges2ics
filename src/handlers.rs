@@ -5,6 +5,7 @@ use serde_derive::Deserialize;
 struct User {
     user: Option<String>,
     password: Option<String>,
+    base64: Option<String>,
 }
 #[get("/")]
 async fn get_calendar_handler(req: HttpRequest) -> Result<HttpResponse> {
@@ -13,8 +14,10 @@ async fn get_calendar_handler(req: HttpRequest) -> Result<HttpResponse> {
 
     let base64_auth : String;
     let params = web::Query::<User>::from_query(req.query_string()).unwrap();
-
-    if let (Some(user), Some(password)) = (&params.user, &params.password) {
+    if let Some(base64) = &params.base64 {
+        base64_auth = base64.to_string();
+    }
+    else if let (Some(user), Some(password)) = (&params.user, &params.password) {
         base64_auth = base64::Engine::encode(&base64::engine::general_purpose::STANDARD, format!("{}:{}",user,password));
     }
     else if let Some(basic_auth_header) = basic_auth_header {
