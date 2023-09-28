@@ -15,6 +15,6 @@ RUN rm ./target/release/deps/myges2ics*
 RUN cargo build --release
 
 FROM debian:12.1-slim as myges2ics
-COPY --from=build /myges2ics/target/release/myges2ics .
 RUN apt update && apt install -y openssl libssl-dev ca-certificates
+COPY --from=build /myges2ics/target/release/myges2ics .
 CMD ["./myges2ics"]
