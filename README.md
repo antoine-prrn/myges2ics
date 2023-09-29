@@ -25,6 +25,10 @@ Please make sure to replace "USER" and "PASSWORD" with your actual myges.fr cred
 
 ```https://myges2ics.aprrn.fr/?base64=BASE64```
 Replace BASE64 with user:password encoded in base64 with the ':'
+To convert in base64 you can use the following command : 
+```bash
+echo 'user:password' | base64
+```
 
 ***
 ## How to run
