@@ -3,6 +3,7 @@ mod config;
 mod auth;
 mod cal;
 mod handlers;
+mod projects;
 use actix_web::{App, HttpServer};
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
