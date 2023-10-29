@@ -1,12 +1,15 @@
 use actix_web::{web, get, HttpRequest, Result, HttpResponse};
 use serde_derive::Deserialize;
 
+use crate::cal::projects_to_ics;
+
 #[derive(Deserialize, Debug)]
 struct User {
     user: Option<String>,
     password: Option<String>,
     base64: Option<String>,
 }
+
 #[get("/")]
 async fn get_calendar_handler(req: HttpRequest) -> Result<HttpResponse> {
     let req_headers = req.headers();
@@ -33,9 +36,16 @@ async fn get_calendar_handler(req: HttpRequest) -> Result<HttpResponse> {
             return Ok(HttpResponse::Unauthorized().body("Unauthorized"));
         }
     };
-    let events = crate::cal::get_events(token).await;
-    let cal = crate::cal::events_to_ics(events.unwrap());
+    let events = crate::cal::get_events(token.clone()).await;
+    let mut cal = crate::cal::events_to_ics(events.unwrap());
 
+    let current_year = current_year();
+    let mut years : Vec<u16> = Vec::new();
+    years.push(current_year);
+    years.push(current_year-1);
+    
+    let projects = crate::projects::get_projects(token, years).await;
+    cal = projects_to_ics(projects?, cal);
     let response = HttpResponse::Ok()
         .append_header((r#"Content-Disposition"#, r#"attachment; filename="myges2ics.ics""#))
         .append_header(("Content-Type","text/calendar; charset=utf-8"))
@@ -43,4 +53,11 @@ async fn get_calendar_handler(req: HttpRequest) -> Result<HttpResponse> {
 
     Ok(response)
 
+}
+
+pub fn current_year() -> u16 {
+    let now = std::time::SystemTime::now();
+    let since_the_epoch = now.duration_since(std::time::UNIX_EPOCH).expect("Time went backwards");
+    let current_year = since_the_epoch.as_secs() / (365 * 24 * 60 * 60) + 1970;
+    return current_year as u16;
 }
