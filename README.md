@@ -9,7 +9,9 @@ To achieve this, you need to subscribe to the server's link using ***basic-auth*
 
 You can subscribe to your calendar using the server **https://myges2ics.aprrn.fr** that I provide or host your own one like on the instructions below.
 
-**Use your own server, there is a lot of cheap VPS for students, the server that I provide can be shut down.**
+> [!IMPORTANT]
+Use your own server, there is a lot of cheap VPS for students, the server that I provide can be shut down.
+
 #### Using a calendar app that supports basic-auth
 [ICSx5](https://f-droid.org/fr/packages/at.bitfire.icsdroid/) on android supports basic-auth. Then your calendar is available any app like Google Calendar or [Simple Calendar Pro](https://f-droid.org/fr/packages/com.simplemobiletools.calendar.pro/).
 
