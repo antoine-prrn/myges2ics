@@ -1,6 +1,6 @@
 use ics::properties::{Location, Summary, Geo, LastModified, Transp, Sequence};
 use reqwest::header;
-use crate::{config::Config, projects::Project};
+use crate::{config::Config, projects::ProjectStep};
 use serde::{Deserialize, Serialize};
 use chrono::{Utc, TimeZone, LocalResult};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -93,22 +93,18 @@ pub fn events_to_ics(events: Vec<Event>) -> ICalendar<'static> {
     
 }
 
-pub fn projects_to_ics(projects: Vec<Project>, calendar: ICalendar) -> ICalendar{
+pub fn projects_to_ics(projects: Vec<ProjectStep>, calendar: ICalendar) -> ICalendar{
     let mut new_calendar = calendar;
     for project in projects {
         let mut cal_event = ics::Event::new(generate_uid(13),Utc::now().format("%Y%m%dT%H%M%SZ").to_string());
-        if let Some(steps) = &project.steps {
-            for step in steps {
-                if let Some (_psp_limit_date) = &step.psp_limit_date {
-                    let start_time = &step.psp_limit_date.unwrap() - 900_000;
-                    cal_event.push(DtStart::new(format!("{}",milliseconds_to_iso8601(&start_time.to_string()).unwrap())));
-                    cal_event.push(DtEnd::new(format!("{}",milliseconds_to_iso8601(&step.psp_limit_date.unwrap().to_string()).unwrap())));
-                    cal_event.push(Summary::new(format!("{} - {}",&step.psp_type, project.name)));
-                    cal_event.push(Description::new(format!(r#"{} : {}\n({}, {})\n\nEtape : {}"#, &step.psp_type, &project.name, &project.course_name, &project.author, &step.psp_desc)));
-                    cal_event.push(LastModified::new(Utc::now().format("%Y%m%dT%H%M%SZ").to_string()));
-                }
-            }
-        }
+
+        let start_time = &project.psp_limit_date.unwrap() - 900_000;
+        cal_event.push(DtStart::new(format!("{}",milliseconds_to_iso8601(&start_time.to_string()).unwrap())));
+        cal_event.push(DtEnd::new(format!("{}",milliseconds_to_iso8601 (&project.psp_limit_date.unwrap().to_string()).unwrap())));
+        cal_event.push(Summary::new(format!("{} - {}", project.psp_type, project.pro_name)));
+        cal_event.push(Description::new(format!(r#"{} : {}\n{}\n\nEtape : {}"#, project.psp_type, &project.pro_name, &project.course_name, project.psp_desc)));
+        cal_event.push(LastModified::new(Utc::now().format("%Y%m%dT%H%M%SZ").to_string()));
+
         new_calendar.add_event(cal_event);
     }
     return new_calendar;

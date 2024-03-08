@@ -44,7 +44,7 @@ async fn get_calendar_handler(req: HttpRequest) -> Result<HttpResponse> {
     years.push(current_year);
     years.push(current_year-1);
     
-    let projects = crate::projects::get_projects(token, years).await;
+    let projects = crate::projects::get_next_project_steps(token).await;
     cal = projects_to_ics(projects?, cal);
     let response = HttpResponse::Ok()
         .append_header((r#"Content-Disposition"#, r#"attachment; filename="myges2ics.ics""#))

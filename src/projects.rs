@@ -1,9 +1,6 @@
 use reqwest::header;
 use serde::{Deserialize, Serialize};
-#[derive(Deserialize, Debug)]
-pub struct WebResult {
-    result: Vec<Project>,
-}
+
 #[derive(Debug, Deserialize, Clone)]
 pub struct Project {
     pub author: String,
@@ -19,25 +16,35 @@ pub struct Step {
     pub psp_limit_date: Option<u128>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ProjectStep {
+    pub course_name: String,
+    pub pro_name: String,
+    pub psp_desc: String,
+    pub psp_type: String,
+    pub psp_limit_date: Option<u128>,
+}
 
-pub async fn get_projects(token : String, years : Vec<u16>) -> Result<Vec<Project>, Box<dyn std::error::Error>> {
+#[derive(Deserialize, Debug)]
+pub struct NextProjectStepsWebResult {
+    result: Vec<ProjectStep>,
+}
+
+pub async fn get_next_project_steps(token : String) -> Result<Vec<ProjectStep>, Box<dyn std::error::Error>> {
     let mut headers = header::HeaderMap::new();
     headers.insert("Authorization", format!("bearer {token}").parse().unwrap());
-    let mut projects : Vec<Project> = Vec::new();
+    let mut projects : Vec<ProjectStep> = Vec::new();
     let client = reqwest::Client::builder().build()?;
-    for year in years {
-        let res = client.get(format!("https://api.kordis.fr/me/{year}/projects"))
-            .headers(headers.clone())
-            .send()
-            .await?;
-        if res.status() == 200 {
-            let res_text = res.text().await?;
-            //println!("{}",res_text);
-            let response: WebResult = serde_json::from_str(&res_text)?;
-            for project in response.result {
-                if let Some(_steps) = &project.steps {
-                    projects.push(project.clone());
-                }
+    let res = client.get(format!("https://api.kordis.fr/me/nextProjectSteps"))
+        .headers(headers.clone())
+        .send()
+        .await?;
+    if res.status() == 200 {
+        let res_text = res.text().await?;
+        let response: NextProjectStepsWebResult = serde_json::from_str(&res_text)?;
+        for project in response.result {
+            if let Some(_psp_limit_date) = &project.psp_limit_date {
+                projects.push(project.clone());
             }
         }
 
